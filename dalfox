@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# colors
+reset='\033[00m'
+line="\033[4;37m"
+r='\033[1;31m'
+g='\033[1;32m'
+y='\033[1;33m'
+b='\033[1;34m'
+p='\033[1;35m'
+c='\033[1;36m'
+w='\033[1;37m'
+yg='\033[0;33m'
+
+banner(){
+clear
+printf "
+${yg}⠀⠀⠀⠀⠀⠀⢰⠢⣄⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+${yg}⠀⠀⠀⠀⠀⠀⠈⡄⢀⠙⢦⣀⠀⠀⠀⢀⢎⢀⠦⢹⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀
+${yg}⠀⠀⠀⠀⠀⠀⠀⢡⠨⣄⠈⠿⣕⣄⢀⡾⠊⠨⣸⡀⢧⠀⠀    ⠀⠀⠀⠀⠀⠀⠀
+${yg}⠀⠀⠀⠀⠀⠀⠀⠈⢞⠻⡗⢆⢷⢇⠛⢀⡀⢴⣶⡇⣸⣦⠀⠀⠀⠀⠀ ▄   ▜ ▐▘      ${w}▄▖
+${yg}⠀⠀⠀⠀⠀⠀⠀⠀⠸⠢⠕⠈⠀⠈⠀⠞⢱⠿⠛⢠⢿⡙⠀⠀⠀⠀ ⠀▌▌▀▌▐ ▜▘▛▌▚▘  ${w}▐ █▌▛▘▛▛▌▌▌▚▘
+${yg}⠀⠀⠀⠀⠀⠀⠀⠀⢐⠆⠀⠀⠀⠀⠀⠀⠁⣄⣄⡼⢎⡀⢣⠀⠀ ⠀⠀▙▘█▌▐▖▐ ▙▌▞▖  ${w}▐ ▙▖▌ ▌▌▌▙▌▞▖
+${yg}⠀⠀⠀⠀⠀⠀⠀⠀⠙⢢⠀⠀⢰⣧⣤⠠⣆⡀⠫⡱⡢⡀⢹⠀    ${w}installing ${yg}dalfox ${w}for termux⠀⠀⠀⠀⠀⠀
+${yg}⠀⠀⠀⠀⠀⠀⠀⠀⠀⡟⠀⡤⡏⠈⠀⠐⠊⠙⠢⡸⣞⡌⠘⡀⠀⠀⠀⠀⠀⠀                ${r}by:zikmh18
+${yg}⠀⠀⠀⠀⠀⠀⠀⢀⠎⠀⠀⣴⡷⡤⢂⠁⠀⠀⢠⠈⠟⡞⢆⡇⠀⠀⠀⠀⠀⠀
+${yg}⠀⠀⠀⠀⠀⠀⠀⢿⣿⠞⠉⢙⣥⠮⠍⠒⠒⠠⠼⡀⠀⠇⡼⠀⠀⠀⠀⠀⠀⠀
+${yg}⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠑⠞⠁
+\n"
+}
+
+
+install(){
+banner
+printf "\n${b}[-] ${w}Starting installing dalfox in termux.\n"
+apt install golang -y > /dev/null 2>&1
+go install github.com/hahwul/dalfox/v2@latest > /dev/null 2>&1
+printf "${y}[?] ${w}Are you using the ohmyzsh theme? (Yes/no): "; read ip
+if [[ $ip == 'yes' ]] || [[ $ip == 'YES' ]] || [[ $ip == 'y' ]] || [[ $ip == 'Y' ]]; then
+echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> $HOME/.zshrc
+cd $HOME/go/bin; mv dalfox $HOME/../usr/bin
+printf "${g}[+] ${w}Installing dalfox sucessfully, typing 'dalfox' for starting dalfox.\n"
+exit 0
+elif [[ $ip == 'no' ]] || [[ $ip == 'NO' ]] || [[ $ip == 'n' ]] || [[ $ip == "N" ]]; then
+echo 'export PATH=$PATH:$(go env GOPATH)/bin' >> $HOME/.zshrc
+cd $HOME/go/bin; mv dalfox $HOME/../usr/bin
+printf "${g}[+] Installing dalfox sucessfully, typing 'dalfox' for starting dalfox.\n"
+exit 0
+fi
+}
+
+starting(){
+banner
+printf "\n${b}[-] ${w}Enter your file (${r}eg: webvuln.txt${w}): ${reset}"; read filename
+clear
+dalfox file $filename
+}
+
+howuse(){
+banner
+printf "${reset}
+What is Dalfox?
+Dalfox is a powerful open-source tool that focuses on automation, making it ideal for quickly scanning for XSS flaws and analyzing parameters. Its advanced testing engine and niche features are designed to streamline the process of detecting and verifying vulnerabilities.
+
+How to use:
+First of all, you look for a website that is vulnerable to XSS, and to find the gap, use paramspider.
+Github paramspider: ${line}git clone https://github.com/devanshbatham/paramspider${reset}
+And for how to install and run it, it's on the paramspider github.
+
+And if you have, get the file from paramspider using the command, dalfox file (enter the file you got in paramspider/result) 
+\n\n"
+}
+
+
+uninstall(){
+banner
+printf "\n${b}[-] ${w}Starting uninstall dalfox.\n"
+pkg uninstall golang -y > /dev/null 2>&1
+rm -rf $HOME/../usr/bin/dalfox
+printf "${g}[+] ${w}Sucessfully uninstall dalfox.\n"
+exit 0
+}
+
+usage(){
+banner
+printf "${reset}
+Usage: ./dalfox [-h] [-i INSTALL DALFOX] [-ho HOW USE DALFOX]
+               [-u UNINSTALL DALFOX] [-s STARTING DALFOX]
+dalfox: error: Please provide either -h option or the -i option.\n"
+}
+
+if [ -z "$*" ]; then
+usage
+elif [ $1 == '-i' ]; then
+install
+elif [ $1 == '-ho' ]; then
+howuse
+elif [ $1 == '-u' ]; then
+uninstall
+elif [ $1 == '-s' ]; then
+starting
+else
+usage
+fi
